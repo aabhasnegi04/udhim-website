@@ -10,6 +10,7 @@ import {
   GlobalMap, 
   CaseStudies, 
   HowItWorks, 
+  ContactForm,
   FinalCTA, 
   FloatingElements 
 } from "@/components/sections"
@@ -34,6 +35,7 @@ export default function Home() {
         <GlobalMap />
         <CaseStudies />
         <HowItWorks />
+        <ContactForm />
         <FinalCTA />
         <Footer />
       </main>

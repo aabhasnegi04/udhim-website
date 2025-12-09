@@ -6,7 +6,7 @@ console.log('Running post-build script...');
 // Create .htaccess file
 const htaccessContent = `RewriteEngine On
 
-# Redirect /products to /products.html
+# Redirect clean URLs to .html files
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
@@ -19,14 +19,27 @@ ErrorDocument 404 /404.html
 fs.writeFileSync(path.join(__dirname, 'out', '.htaccess'), htaccessContent);
 console.log('✓ Created .htaccess file');
 
-// Create products/index.html from products.html
-const productsDir = path.join(__dirname, 'out', 'products');
-if (!fs.existsSync(productsDir)) {
-  fs.mkdirSync(productsDir, { recursive: true });
-}
+// List of pages to create folder structure for
+const pages = ['products', 'about', 'industries'];
 
-const productsHtml = fs.readFileSync(path.join(__dirname, 'out', 'products.html'), 'utf8');
-fs.writeFileSync(path.join(productsDir, 'index.html'), productsHtml);
-console.log('✓ Created products/index.html');
+pages.forEach(page => {
+  const pageDir = path.join(__dirname, 'out', page);
+  const htmlFile = path.join(__dirname, 'out', `${page}.html`);
+  
+  // Check if the HTML file exists
+  if (fs.existsSync(htmlFile)) {
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(pageDir)) {
+      fs.mkdirSync(pageDir, { recursive: true });
+    }
+    
+    // Copy HTML to index.html in the directory
+    const htmlContent = fs.readFileSync(htmlFile, 'utf8');
+    fs.writeFileSync(path.join(pageDir, 'index.html'), htmlContent);
+    console.log(`✓ Created ${page}/index.html`);
+  } else {
+    console.log(`⚠ Warning: ${page}.html not found, skipping...`);
+  }
+});
 
 console.log('Post-build complete!');
