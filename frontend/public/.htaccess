@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Handle root
+RewriteRule ^$ index.html [L]
+
+# Handle clean URLs
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^products/?$ products.html [L]
+RewriteRule ^industries/?$ industries.html [L]
+
+# Handle static files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ $1.html [L]
